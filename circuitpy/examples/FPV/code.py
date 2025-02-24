@@ -75,8 +75,10 @@ class FpvApp:
             # if in motion
             request_state = AmigaControlState.STATE_AUTO_READY
 
-        cmd_speed = self.max_speed * self.axis2.map(channels[2])
-        cmd_ang_rate = self.max_angular_rate * -self.axis3.map(channels[3])
+        L = self.axis2.map(channels[2])
+        R = self.axis2.map(channels[3])
+        cmd_speed = self.max_speed * - (L+R) / 2
+        cmd_ang_rate = self.max_angular_rate * - (L-R) / 2
         rpdo1 = AmigaRpdo1(state_req=request_state, cmd_speed=cmd_speed, cmd_ang_rate=cmd_ang_rate)
 
         # print('state', self.amiga_tpdo1, 'cmd', rpdo1, end='\r')
